@@ -7,10 +7,9 @@ import com.application.mintplaid.dto.RegisterResponse;
 import jakarta.mail.MessagingException;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 
 public interface AuthenticationServiceInterface {
-    public RegisterResponse register(RegisterRequest registerRequest) throws MessagingException, UnsupportedEncodingException;
-    public AuthenticationResponse authentication(AuthenticationRequest registerRequest);
+    RegisterResponse register(RegisterRequest registerRequest) throws MessagingException, UnsupportedEncodingException;
+    AuthenticationResponse authentication(AuthenticationRequest registerRequest);
 
 }

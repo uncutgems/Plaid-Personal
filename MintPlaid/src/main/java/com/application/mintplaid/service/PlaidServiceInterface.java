@@ -6,6 +6,6 @@ import com.application.mintplaid.dto.LinkPlaidResponse;
 import java.net.URISyntaxException;
 
 public interface PlaidServiceInterface {
-    public LinkPlaidResponse initialLink() throws URISyntaxException;
-    public LinkPlaidResponse fixLink(LinkPlaidRequest plaidRequest) throws URISyntaxException;
+    LinkPlaidResponse initialLink() throws URISyntaxException;
+    LinkPlaidResponse fixLink(LinkPlaidRequest plaidRequest) throws URISyntaxException;
 }

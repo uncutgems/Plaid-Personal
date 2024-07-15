@@ -18,7 +18,7 @@ public class RegisterRequest {
 
     @NotEmpty
     @NotNull(message = "email cannot be null")
-    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+    @Pattern(regexp = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
             message = "Invalid email")
     private String email;
 

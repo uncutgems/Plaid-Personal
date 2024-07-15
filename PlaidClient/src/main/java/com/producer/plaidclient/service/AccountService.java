@@ -1,6 +1,5 @@
 package com.producer.plaidclient.service;
 
-import com.producer.plaidclient.config.Environment;
 import com.producer.plaidclient.entity.Account;
 import com.producer.plaidclient.entity.Item;
 import com.producer.plaidclient.plaid.PlaidAccountContract;

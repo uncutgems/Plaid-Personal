@@ -1,7 +1,6 @@
 package com.application.mintplaid.service;
 
 import com.application.mintplaid.entity.Account;
-import com.application.mintplaid.entity.Item;
 import com.application.mintplaid.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,28 +1,19 @@
 package com.application.mintplaid.service;
 
-import com.application.mintplaid.config.Constant;
 import com.application.mintplaid.dto.TransactionRequest;
 import com.application.mintplaid.entity.Account;
 import com.application.mintplaid.entity.Item;
 import com.application.mintplaid.entity.Transaction;
 import com.application.mintplaid.entity.User;
-import com.application.mintplaid.plaid.PlaidAccountContract;
-import com.application.mintplaid.plaid.transaction.PlaidTransactionContract;
-import com.application.mintplaid.plaid.transaction.PlaidTransactionRequest;
-import com.application.mintplaid.plaid.transaction.PlaidTransactionResponse;
 import com.application.mintplaid.repository.AccountRepository;
 import com.application.mintplaid.repository.ItemRepository;
 import com.application.mintplaid.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

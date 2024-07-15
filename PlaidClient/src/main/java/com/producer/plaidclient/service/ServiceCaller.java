@@ -3,7 +3,6 @@ package com.producer.plaidclient.service;
 import com.producer.plaidclient.entity.Item;
 import com.producer.plaidclient.plaid.webhook.PlaidWebhook;
 import com.producer.plaidclient.repository.ItemRepository;
-import com.producer.plaidclient.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
