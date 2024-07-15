@@ -1,0 +1,15 @@
+/.jpb/
+/.idea/
+/MintPlaid/.idea/
+/MintPlaid/.mvn
+/PlaidClient/.idea/
+/PlaidClient/.mvn
+/mint_plaid_ui/.idea/
+/mint_plaid_ui/.next
+/personal_finance/.idea
+/personal_finance/.next
+/client/
+/MintPlaid/src/main/resources/application.yml
+/PlaidClient/src/main/resources/application.yml
+/MintPlaid/target
+/PlaidClient/target
