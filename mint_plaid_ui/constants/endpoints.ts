@@ -4,7 +4,7 @@ export const LOGIN_ENDPOINT = '/api/auth/login';
 
 export const REGISTER_ENDPOINT = '/api/auth/register';
 
-export const PLAID_EXCHANGE_TOKEN = '/api/auth/exchangeToken';
+export const PLAID_EXCHANGE_TOKEN = '/api/plaidSync/exchangeToken';
 
 export const PLAID_LINK_TOKEN_INITIAL = "/api/plaidSync/initial";
 

@@ -10,6 +10,10 @@ export const getLocalAccessToken = () => {
     return cookies().get(ACCESS_TOKEN)?.value
 }
 
+export const isTokenValid = (tokenKey: string) => {
+    return cookies().has(tokenKey);
+}
+
 export const updateLocalAccessToken = (userSession: string) => {
     let userJson = JSON.parse(userSession || '{}');
     cookies().set(ACCESS_TOKEN, userJson.accessToken, {

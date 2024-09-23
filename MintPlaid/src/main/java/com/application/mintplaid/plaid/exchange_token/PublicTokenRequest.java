@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class PublicTokenRequest {
-    @JsonProperty(value = "publicToken", required = true)
+    @JsonProperty(value = "public_token", required = true)
     private String publicToken;
 
 }

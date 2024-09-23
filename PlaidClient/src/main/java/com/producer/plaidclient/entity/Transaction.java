@@ -14,14 +14,13 @@ import java.util.Date;
 @Builder
 public class Transaction {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(unique = true)
     private String plaidTransactionId;
 
-    @JoinColumn(referencedColumnName = "plaid_account_id")
-    @Column(name = "plaid_account")
+    @JoinColumn(name = "plaid_account", referencedColumnName = "plaid_account_id")
     private String plaidAccount;
 
     private Date date;

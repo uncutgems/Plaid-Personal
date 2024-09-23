@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class TransactionService {
 
-    private static final String dateFormat = "dd-MM-yyyy";
+    private static final String dateFormat = "yyyy-MM-dd";
     private final ItemRepository itemRepository;
     private final TransactionRepository transactionRepository;
     @Value("${application.plaid.sandboxEnv}")

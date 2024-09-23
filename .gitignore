@@ -13,3 +13,7 @@
 /PlaidClient/src/main/resources/application.yml
 /MintPlaid/target
 /PlaidClient/target
+/MintPlaid.iml
+/PlaidClient.iml
+/.idea
+/.jpb

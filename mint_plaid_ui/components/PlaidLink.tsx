@@ -2,79 +2,108 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {createLinkToken, exchangePublicToken} from "@/lib/actions/user.actions";
-import {useRouter} from "next/navigation";
-import {PlaidLinkOnSuccess, PlaidLinkOptions, usePlaidLink} from 'react-plaid-link';
+import {usePlaidLink} from 'react-plaid-link';
+import { getCookie, setCookie } from 'cookies-next'
+import {LINK_TOKEN} from "@/constants";
 
 
-const PlaidLink = ({user,variant}: PlaidLinkProps) => {
-    const router = useRouter();
-    const [token, setToken] = useState('');
+
+const PlaidLink = ({variant}: PlaidLinkProps) => {
+    const [linkToken, setLinkToken] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
-        const getLinkToken = async () => {
-            const data = await createLinkToken();
-
-            setToken(data?.['link_token']);
+        const linkToken = getCookie(LINK_TOKEN)
+        if (linkToken) {
+            setLinkToken(linkToken)
         }
-        getLinkToken().then();
-    }, [user]);
-    const onSuccess = useCallback<PlaidLinkOnSuccess>(async (public_token: string) => {
-        const success = await exchangePublicToken({
-            publicToken: public_token
-        })
-        if (success)
-            router.push("/");
-    }, [router])
+    }, []);
 
-    const config: PlaidLinkOptions = {
-        token,
-        onSuccess
-    }
-
-    const { open, ready } = usePlaidLink(config);
-
-    const useConnectBank = useCallback(async () => {
-        const getLinkToken = async () => {
-            const data = await createLinkToken();
-            return data['link_token'];
+    const getLinkToken = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const response = await createLinkToken();
+            setLinkToken(response['link_token']);
+            setCookie(LINK_TOKEN, response['link_token'], {
+                expires: response['expiration'],
+                httpOnly: true,
+            });
+        } catch (error) {
+            console.error('Error fetching link token:', error);
+        } finally {
+            setIsLoading(false);
         }
-        const linkToken = await getLinkToken();
-        const {open, ready} = usePlaidLink({
-            token: linkToken,
-            onSuccess: (public_token: string, metadata) => {
-                exchangePublicToken({publicToken: public_token})
+    }, []);
+
+    const onSuccess = useCallback(async (public_token: string) => {
+        try {
+            console.log("on success")
+            const response = await exchangePublicToken({
+                publicToken: public_token
+            });
+            if (response) {
+                console.log('Successfully exchanged token and linked account');
             }
-        })
-        open()
-    })
-    
+        } catch (error) {
+            console.error('Error exchanging public token:', error);
+        }
+    }, []);
+
+    const config = {
+        token: linkToken,
+        onSuccess,
+    };
+
+    const {open, ready} = usePlaidLink(config);
+
+    const handleClick = useCallback(async () => {
+        if (linkToken) {
+            open();
+        } else {
+            await getLinkToken();
+        }
+    }, [linkToken, open, getLinkToken]);
+
+    // Effect to open Plaid Link once we have a token
+    React.useEffect(() => {
+        if (linkToken && ready) {
+            open();
+        }
+    }, [linkToken, ready, open]);
+
     return (
         <>
             {variant === 'primary' ? (
                 <Button
-                    onClick={() => useConnectBank}
+                    onClick={handleClick}
+                    disabled={isLoading}
                     className="plaidlink-primary"
                 >
-                    Connect bank
+                    {isLoading ? 'Loading...' : 'Connect a bank account'}
                 </Button>
-            ): variant === 'ghost' ? (
-                <Button onClick={() => useConnectBank} variant="ghost" className="plaidlink-ghost">
+            ) : variant === 'ghost' ? (
+                <Button onClick={handleClick} variant="ghost" className="plaidlink-ghost">
                     <Image
                         src="/icons/connect-bank.svg"
                         alt="connect bank"
                         width={24}
                         height={24}
                     />
-                    <p className='hiddenl text-[16px] font-semibold text-black-2 xl:block'>Connect bank</p>
+                    <p className='hiddenl text-[16px] font-semibold text-black-2 xl:block'>
+                        {isLoading ? 'Loading...' : 'Connect a bank account'}
+                    </p>
                 </Button>
-            ): (
-                <Button onClick={() => useConnectBank} className="plaidlink-default">
+            ) : (
+                <Button onClick={handleClick} className="plaidlink-default">
                     <Image
                         src="/icons/connect-bank.svg"
                         alt="connect bank"
                         width={24}
                         height={24}
                     />
-                    <p className='text-[16px] font-semibold text-black-2'>Connect bank</p>
+                    <p className='text-[16px] font-semibold text-black-2'>
+                        {isLoading ? 'Loading...' : 'Connect a bank account'}
+                    </p>
                 </Button>
             )}
         </>

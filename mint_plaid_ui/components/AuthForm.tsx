@@ -21,6 +21,8 @@ import {authFormSchema} from "@/lib/utils";
 import {Loader2} from "lucide-react";
 import {signIn, signUp} from "@/lib/actions/user.actions";
 
+import Notification from '../components/Notification';
+
 
 const AuthForm = ({type}: { type: string }) => {
     const router = useRouter();
@@ -28,6 +30,8 @@ const AuthForm = ({type}: { type: string }) => {
 
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -48,6 +52,19 @@ const AuthForm = ({type}: { type: string }) => {
                     password: data.password!,
                 }
                 const newUser = await signUp(userData);
+                console.log(newUser);
+                if (newUser.status === 200) {
+                    setNotification({
+                        message: 'Signed up successfully. Please check your email to confirm your account.',
+                        type: 'success'
+                    });
+                    setTimeout(() => { router.push('/sign-in'); }, 5000);
+                } else {
+                    setNotification({
+                        message: 'Signed up failed. Please try again later.',
+                        type: 'error'
+                    })
+                }
                 setUser(newUser);
             }
             if (type === 'sign-in') {
@@ -55,6 +72,15 @@ const AuthForm = ({type}: { type: string }) => {
                     email: data.email,
                     password: data.password,
                 })
+                console.log("HEYYYYYYasdfasdf" + !response)
+                if (!response) {
+                    console.log("IT IS HERE")
+                    setNotification({
+                        message: 'Signed in failed. Please check your credentials.',
+                        type: 'error'
+                    });
+                    setTimeout(() => { router.push('/sign-in'); }, 5000);
+                }
                 setUser(response);
                 if (response) {
                     router.push("/");
@@ -148,6 +174,7 @@ const AuthForm = ({type}: { type: string }) => {
                     </>
                 )
             }
+            {notification && <Notification message={notification.message} type={notification.type} />}
         </section>
     );
 }

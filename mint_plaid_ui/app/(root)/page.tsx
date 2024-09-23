@@ -2,9 +2,16 @@ import React from 'react';
 import HeaderBox from '@/components/HeaderBox'
 import TotalBalanceBox from "@/components/TotalBalanceBox";
 import RightSidebar from "@/components/RightSidebar";
+import {getLoggedInUser} from "@/lib/actions/user.actions";
+import {redirect} from "next/navigation";
 
-const Home = () => {
-    const loggedIn : User = { $id: '1', userId: '1', username: 'qdinh', email: 'qdinh@gmail.com', ssn: 'qdinh@gmail.com' }
+const Home = async () => {
+    const loggedIn = await getLoggedInUser();
+
+    if (!loggedIn) {
+        console.log(loggedIn)
+        redirect("/sign-in");
+    }
 
     return (
         <section className={"home"}>
@@ -21,7 +28,7 @@ const Home = () => {
                 RECENT TRANSACTION
             </div>
 
-            <RightSidebar user={loggedIn} transactions={[]} banks={[{currentBalance: 99999999.75}, {currentBalance: 99999999.75}]}/>
+            <RightSidebar user={loggedIn} transactions={[]} banks={[{currentBalance: 9999999999.75}, {currentBalance: 9999999999.75}]}/>
         </section>
     )
 }

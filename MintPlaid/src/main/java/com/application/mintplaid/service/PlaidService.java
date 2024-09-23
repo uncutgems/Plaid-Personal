@@ -24,7 +24,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PlaidService implements PlaidServiceInterface {
     private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
     @Value("${application.plaid.sandboxEnv}")
     private String sandboxEnv;
     @Value("${application.plaid.sandboxClientId}")
@@ -98,9 +97,8 @@ public class PlaidService implements PlaidServiceInterface {
                     .itemId(exchangeTokenResponseContract.getItemId())
                     .accessToken(exchangeTokenResponseContract.getAccessToken())
                     .userId(user.getId())
+                    .actionRequired(Item.Action.None)
                     .build();
-            item.setActionRequired(Item.Action.None);
-            userRepository.save(user);
             itemRepository.save(item);
             return true;
         }

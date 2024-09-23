@@ -1,6 +1,11 @@
 import axios from "axios";
 import {REFRESH_TOKEN, SANDBOX_HOST} from "@/constants/endpoints";
-import {getLocalAccessToken, getLocalRefreshToken, updateLocalAccessToken} from "@/lib/actions/token.service";
+import {
+    getLocalAccessToken,
+    getLocalRefreshToken,
+    isTokenValid,
+    updateLocalAccessToken
+} from "@/lib/actions/token.service";
 import {redirect} from "next/navigation";
 
 
@@ -32,22 +37,25 @@ instance.interceptors.response.use(
 
         if (err.response) {
             // Access Token was expired
-            if (err.response.status === 401 && !originalConfig._retry) {
+            if (err.response.status === 401 || err.response.status === 403  && !originalConfig._retry) {
                 originalConfig._retry = true;
+                if (isTokenValid(REFRESH_TOKEN)){
+                    try {
+                        const rs = await instance.post(REFRESH_TOKEN, {
+                            refreshToken: getLocalRefreshToken(),
+                        });
+                        if (rs.status === 200) {
+                            updateLocalAccessToken(rs.data);
+                        } else {
+                            redirect('/login');
+                        }
 
-                try {
-                    const rs = await instance.post(REFRESH_TOKEN, {
-                        refreshToken: getLocalRefreshToken(),
-                    });
-                    if (rs.status === 200) {
-                        updateLocalAccessToken(rs.data);
-                    } else {
-                        redirect('/login');
+                        return instance(originalConfig);
+                    } catch (_error) {
+                        return Promise.reject(_error);
                     }
-
-                    return instance(originalConfig);
-                } catch (_error) {
-                    return Promise.reject(_error);
+                } else {
+                    redirect('/login');
                 }
             }
         }

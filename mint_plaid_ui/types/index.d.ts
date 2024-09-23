@@ -68,7 +68,6 @@ declare type Transaction = {
   category: string;
   date: string;
   image: string;
-  type: string;
   $createdAt: string;
   channel: string;
   senderBankId: string;
@@ -317,4 +316,9 @@ declare interface getBankProps {
 
 declare interface getBankByAccountIdProps {
   accountId: string;
+}
+
+interface NotificationProps {
+  message: string;
+  type: 'success' | 'error';
 }

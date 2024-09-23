@@ -154,6 +154,7 @@ public class AuthenticationService implements AuthenticationServiceInterface{
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setEnabled(true);
+            userRepository.save(user);
             return "User Email Verification is completed. You can now close this tab";
         }
         return "The Verification Code is invalid, please register again";

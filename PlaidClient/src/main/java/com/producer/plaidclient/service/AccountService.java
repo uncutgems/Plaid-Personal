@@ -50,6 +50,7 @@ public class AccountService {
                         account.setName(plaidAccountContract.getName());
                         account.setType(plaidAccountContract.getType());
                         account.setSubtype(plaidAccountContract.getSubtype());
+                        account.setItemId(itemId);
                     }
                     else {
                         account = Account.builder()
@@ -59,6 +60,7 @@ public class AccountService {
                                 .name(plaidAccountContract.getName())
                                 .type(plaidAccountContract.getType())
                                 .subtype(plaidAccountContract.getSubtype())
+                                .itemId(itemId)
                                 .build();
                     }
 

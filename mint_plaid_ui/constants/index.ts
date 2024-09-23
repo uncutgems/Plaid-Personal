@@ -136,8 +136,8 @@ export const transactionCategoryStyles = {
   },
 };
 
-export const SESSION_INFO = 'session_info';
 export const ACCESS_TOKEN = 'access_token';
 export const REFRESH_TOKEN = 'refresh_token';
 export const USERNAME = 'username';
 export const EMAIL = 'email';
+export const LINK_TOKEN = 'link_token';

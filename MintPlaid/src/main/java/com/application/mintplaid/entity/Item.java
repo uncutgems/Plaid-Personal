@@ -27,7 +27,7 @@ public class Item {
     private String cursor;
 
     @JoinColumn(name = "id", nullable = false)
-    @Column(name = "user")
+    @Column(name = "user_id")
     private Long userId;
 
     @Column(name = "action_required")

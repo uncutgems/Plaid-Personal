@@ -58,15 +58,18 @@ export const createLinkToken = async () => {
 
 export const exchangePublicToken = async ({publicToken}: exchangePublicTokenProps) => {
     const response = await authHeader.post(Endpoints.PLAID_EXCHANGE_TOKEN, {
-        publicToken: publicToken
+        public_token: publicToken
     })
     return response.status === 200;
 
 }
 
-export async function getLoggedInUser() {
+export async function getLoggedInUser(): Promise<User> {
     const username = cookies().get(USERNAME)?.value as string;
     const email = cookies().get(EMAIL)?.value as string;
+    if (username && email) {
+        
+    }
     return {
         username: username,
         email: email,

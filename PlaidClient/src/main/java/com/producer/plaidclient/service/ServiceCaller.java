@@ -34,12 +34,12 @@ public class ServiceCaller {
                     itemRepository.delete(item);
                 case "WEBHOOK_UPDATE_ACKNOWLEDGE":
             }
-        } else if (Objects.equals(plaidWebhook.getWebhookType(), "TRANSACTION")) {
+        } else if (Objects.equals(plaidWebhook.getWebhookType(), "TRANSACTIONS")) {
             switch (plaidWebhook.getWebhookCode()) {
                 case "SYNC_UPDATES_AVAILABLE":
                     // TODO: save directly to database.
-                    transactionService.fetchTransaction(plaidWebhook.getItemId());
                     accountService.fetchBalance(plaidWebhook.getItemId());
+                    transactionService.fetchTransaction(plaidWebhook.getItemId());
                 case "RECURRING_TRANSACTION_UPDATE":
                 case "INITIAL_UPDATE":
                 case "HISTORICAL_UPDATE":
