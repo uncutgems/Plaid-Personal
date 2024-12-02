@@ -2,15 +2,24 @@
 
 import * as Endpoints from "../../constants/endpoints"
 import {parseStringify} from "@/lib/utils";
-import {removeUser, updateLocalAccessToken} from "@/lib/actions/token.service";
 import authHeader from "@/lib/actions/auth.header";
-import {EMAIL, USERNAME} from "@/constants";
+import {ACCESS_TOKEN, EMAIL, REFRESH_TOKEN, USERNAME} from "@/constants";
 import {cookies} from "next/headers";
+import axios from "axios";
+import {SANDBOX_HOST} from "@/constants/endpoints";
+import {redirect} from "next/navigation";
+
+const axiosInstance = axios.create({
+    baseURL: SANDBOX_HOST,
+    headers: {
+        "Content-Type": "application/json",
+    }
+})
 
 export const signIn = async ({email, password} : signInProps) => {
     try {
         if (email && password) {
-             return await authHeader.post(Endpoints.LOGIN_ENDPOINT, {
+             return await axiosInstance.post(Endpoints.LOGIN_ENDPOINT, {
                 email: email,
                 password: password
             }).then((response) => {
@@ -28,7 +37,7 @@ export const signIn = async ({email, password} : signInProps) => {
 
 export const signUp = async ({username, email, password} : SignUpParams) => {
     try {
-        return await authHeader.post(Endpoints.REGISTER_ENDPOINT, {
+        return await axiosInstance.post(Endpoints.REGISTER_ENDPOINT, {
             username:username,
             email: email,
             password: password
@@ -43,7 +52,7 @@ export const signUp = async ({username, email, password} : SignUpParams) => {
 }
 
 export const logout = async () => {
-    removeUser();
+    await removeUser();
 }
 
 export const createLinkToken = async () => {
@@ -68,10 +77,47 @@ export async function getLoggedInUser(): Promise<User> {
     const username = cookies().get(USERNAME)?.value as string;
     const email = cookies().get(EMAIL)?.value as string;
     if (username && email) {
-        
+        return {
+            username: username,
+            email: email,
+        }
     }
     return {
-        username: username,
-        email: email,
+        username: "",
+        email: "",
     }
+}
+
+export const updateLocalAccessToken = async (userSession: string) => {
+    let userJson = JSON.parse(userSession || '{}');
+    cookies().set(ACCESS_TOKEN, userJson.accessToken, {
+        httpOnly: true,
+        secure: true,
+        expires: userJson['accessExpire'],
+    });
+    if (userJson.refreshToken) {
+        cookies().set(REFRESH_TOKEN, userJson.refreshToken, {
+            httpOnly: true,
+            secure: true,
+            expires: userJson['refreshExpire'],
+        });
+    }
+    cookies().set(USERNAME, userJson.username, {
+        httpOnly: true,
+        secure: true,
+        expires: userJson['refreshExpire'],
+    });
+    cookies().set(EMAIL, userJson.email, {
+        httpOnly: true,
+        secure: true,
+        expires: userJson['refreshExpire'],
+    })
+}
+
+export const removeUser = async () => {
+    cookies().delete(ACCESS_TOKEN)
+    cookies().delete(REFRESH_TOKEN)
+    cookies().delete(USERNAME)
+    cookies().delete(EMAIL)
+    redirect('/login')
 }

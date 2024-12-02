@@ -7,7 +7,6 @@ import com.application.mintplaid.entity.Item;
 import com.application.mintplaid.entity.User;
 import com.application.mintplaid.plaid.exchange_token.*;
 import com.application.mintplaid.repository.ItemRepository;
-import com.application.mintplaid.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;

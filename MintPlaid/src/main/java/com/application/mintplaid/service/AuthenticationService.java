@@ -31,6 +31,9 @@ public class AuthenticationService implements AuthenticationServiceInterface{
     @Value("${application.security.jwt.refresh-token.expiration}")
     private Long refreshTokenDurationMs;
 
+    @Value("${application.security.jwt.expiration}")
+    private Long accessTokenDurationMs;
+
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final UserRepository userRepository;
@@ -88,7 +91,7 @@ public class AuthenticationService implements AuthenticationServiceInterface{
                 .responseCode(200)
                 .message("Login Successful")
                 .accessToken(jwtToken).refreshToken(refreshToken.getRefreshToken())
-                .accessExpire(currentTime + 3600000).refreshExpire(currentTime + 86400000)
+                .accessExpire(currentTime + accessTokenDurationMs).refreshExpire(currentTime + refreshTokenDurationMs)
                 .email(user.getEmail()).role(String.valueOf(user.getRole()))
                 .username(user.getUsername())
                 .enabled(user.getEnabled()).build();
@@ -124,7 +127,8 @@ public class AuthenticationService implements AuthenticationServiceInterface{
                     refreshTokenRepository.deleteByUser(user);
                     return new TokenRefreshResponse(jwtService.generateToken(user),
                             createRefreshToken(user.getId()).getRefreshToken(),
-                            currentTime + 3600000, currentTime + 86400000, user.getEmail()
+                            currentTime + accessTokenDurationMs,
+                            currentTime + refreshTokenDurationMs, user.getEmail()
                             , String.valueOf(user.getRole()), user.getEnabled());
                 }).orElseThrow(() -> new TokenRefreshException(token, "Refresh token does not exist or has expired"));
     }

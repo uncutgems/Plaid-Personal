@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, IBM_Plex_Serif } from "next/font/google";
 import "./globals.css";
 import React from "react";
+import Providers from "@/app/Providers";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const ibmFlexSerif = IBM_Plex_Serif({
@@ -25,7 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${ibmFlexSerif.variable}`}>{children}</body>
+      <body className={`${inter.variable} ${ibmFlexSerif.variable}`}>
+      <Providers>
+        {children}
+      </Providers>
+      </body>
     </html>
   );
 }

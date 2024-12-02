@@ -72,9 +72,7 @@ const AuthForm = ({type}: { type: string }) => {
                     email: data.email,
                     password: data.password,
                 })
-                console.log("HEYYYYYYasdfasdf" + !response)
                 if (!response) {
-                    console.log("IT IS HERE")
                     setNotification({
                         message: 'Signed in failed. Please check your credentials.',
                         type: 'error'
@@ -115,7 +113,7 @@ const AuthForm = ({type}: { type: string }) => {
                                             <p className={"text-14 font-normal text-gray-600"}>
                                                 {"Please confirm your email address before "}
                                             </p>
-                                            <Link href={"sign-in"}
+                                            <Link href={"/sign-in"}
                                                   className={"form-link"}>
                                                 {"signing in"}
                                             </Link>
@@ -167,7 +165,7 @@ const AuthForm = ({type}: { type: string }) => {
                             <p className={"text-14 font-normal text-gray-600"}>
                                 {type === 'sign-in' ? "Don't have an account ?" : "Already have an account ?"}
                             </p>
-                            <Link href={type === 'sign-in' ? "/sign-up" : "sign-in"} className={"form-link"}>
+                            <Link href={type === 'sign-in' ? "/sign-up" : "/sign-in"} className={"form-link"}>
                                 {type === 'sign-in' ? "Sign Up" : "Sign In"}
                             </Link>
                         </footer>

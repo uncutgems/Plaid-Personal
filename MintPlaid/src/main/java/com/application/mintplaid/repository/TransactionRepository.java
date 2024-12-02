@@ -14,7 +14,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     List<Transaction> findAllByPlaidAccountInAndDateBetween(List<String> plaidAccountIds, Date startDate, Date endDate,
                                                             Pageable pageable);
 
-    Transaction findByPlaidTransactionId(String plaidTransactionId);
-
+    List<Transaction> findAllByPlaidAccountIn(List<String> plaidAccountIds, Pageable pageable);
 
 }

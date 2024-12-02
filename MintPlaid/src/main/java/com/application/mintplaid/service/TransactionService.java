@@ -33,8 +33,6 @@ public class TransactionService implements TransactionServiceInterface{
     @Override
     public List<Transaction> findTransactionByDate(TransactionRequest transactionRequest) throws ParseException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Date startDate = new SimpleDateFormat(dateFormat).parse(transactionRequest.getStartDate());
-        Date endDate = new SimpleDateFormat(dateFormat).parse(transactionRequest.getEndDate());
         int page = transactionRequest.getPage() != null ? transactionRequest.getPage() : 0;
         int size = transactionRequest.getSize() != null ? transactionRequest.getSize() : 25;
         Pageable pageable = PageRequest.of(page, size);
@@ -50,7 +48,13 @@ public class TransactionService implements TransactionServiceInterface{
         for (Account account : accounts) {
             accountIds.add(account.getPlaidAccountId());
         }
-        return transactionRepository.findAllByPlaidAccountInAndDateBetween(accountIds, startDate, endDate, pageable);
+        if (transactionRequest.getStartDate() != null && transactionRequest.getEndDate() != null) {
+            Date startDate = new SimpleDateFormat(dateFormat).parse(transactionRequest.getStartDate());
+            Date endDate = new SimpleDateFormat(dateFormat).parse(transactionRequest.getEndDate());
+
+            return transactionRepository.findAllByPlaidAccountInAndDateBetween(accountIds, startDate, endDate, pageable);
+        }
+        return transactionRepository.findAllByPlaidAccountIn(accountIds, pageable);
     }
 
 
