@@ -2,7 +2,6 @@
 
 import * as Endpoints from "../../constants/endpoints"
 import {parseStringify} from "@/lib/utils";
-import authHeader from "@/lib/actions/auth.header";
 import {ACCESS_TOKEN, EMAIL, REFRESH_TOKEN, USERNAME} from "@/constants";
 import {cookies} from "next/headers";
 import axios from "axios";
@@ -57,7 +56,7 @@ export const logout = async () => {
 
 export const createLinkToken = async () => {
     try {
-        const response = await authHeader.get(Endpoints.PLAID_LINK_TOKEN_INITIAL)
+        const response = await axiosInstance.get(Endpoints.PLAID_LINK_TOKEN_INITIAL)
         return parseStringify(response.data)
     } catch  (error) {
         console.log(error);
@@ -66,7 +65,7 @@ export const createLinkToken = async () => {
 }
 
 export const exchangePublicToken = async ({publicToken}: exchangePublicTokenProps) => {
-    const response = await authHeader.post(Endpoints.PLAID_EXCHANGE_TOKEN, {
+    const response = await axiosInstance.post(Endpoints.PLAID_EXCHANGE_TOKEN, {
         public_token: publicToken
     })
     return response.status === 200;
